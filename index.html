@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main class="game">
+    <section id="screen-start" class="screen is-active">
+        <h1>Game Pikachu</h1>
+        <div class="button">
+            <button class="btnlevel" data-value="1">Level 1</button>
+            <button class="btnlevel" data-value="2">Level 2</button>
+            <button class="btnlevel" data-value="3">Level 3</button>
+            <button class="btnlevel" data-value="4">Level 4</button>
+            <button class="btnlevel" data-value="5">Level 5</button>
+            <button class="btnlevel" data-value="6">Level 6</button>
+        </div>
+    </section>
+    <section id="screen-game" class="screen">
+            <header class="infor">
+                <div class="game-infor">Level <strong id="glevel">1</strong></div>
+                <div class="game-infor">Điểm <strong id="gscore">0</strong></div>
+            </header>
+            <div class="time">
+                <div class="bar" id="timer-bar"></div>
+            </div>
+        <div class="wrap">
+            <div id="board" style="--cols:17; --rows:10">
+                <div class="tile"></div>
+                <div class="tile"> </div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
+        <div class="btnplay">
+            <button class="btn-gameplay" id="hint">Gợi ý</button>
+            <button class="btn-gameplay" id="shuffle">Trộn</button>
+            <button class="btn-gameplay" id="new">Ván mới</button>
+            <button class="btn-gameplay" id="exit">Thoát</button>
+        </div>
+    </section>
+    <section id="screen-end" class="screen">
+        <h2 id="end-message">Game Over</h2>
+        <p>Điểm <strong id="end-score"></strong> </p>
+        <div class="button-end">
+            <button class="btnEnd" value="1">Ván mới</button>
+            <button class="btnEnd" value="2">Menu</button>
+        </div>
+    </section>
+</main>
+</body>
+</html>
