@@ -61,7 +61,12 @@ export function renderBoard(board, boardEl, onTileClick) {
             if (isBorder) tile.classList.add("tile--border");
             else if (board[r][c] === EMPTY) tile.classList.add("tile--empty");
             else if (board[r][c] === BLOCKER) tile.classList.add("tile--blocker");
-            else tile.textContent = TILE_ICONS[board[r][c]];
+            else  {
+                const s = document.createElement("span");
+                s.className = "tile__img";
+                s.style.setProperty("--i", (board[r][c]-1));
+                tile.appendChild(s);
+            }
 
             tile.addEventListener("click", () => onTileClick(r, c, tile));
             boardEl.appendChild(tile);

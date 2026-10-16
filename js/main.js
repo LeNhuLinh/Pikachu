@@ -1,8 +1,7 @@
 import {haveLine} from "./way.js";
 import {shifltRotate, shiftConner, shiftHalf, shiftLeftRight, shiftUpDown} from "./connect.js";
 import {BLOCKER, EMPTY} from "./config.js";
-import {renderBoard} from "./board.js";
-
+import {createBoard, createBoardWithBlocker, renderBoard} from "./board.js";
 const boardEl = document.getElementById("board");
 
 const state={
@@ -15,7 +14,36 @@ const state={
     isOver:false,
     selected:null
 }
+function showScreen(id){
+    const screen = document.querySelectorAll(".screen");
+    screen.forEach(function(screen) {
+        screen.classList.remove("is-active");
+    });
+    document.getElementById(id).classList.add("is-active");
+}
+function updateHud(){
+    const levelEl = document.getElementById("glevel");
+    const scoreEl = document.getElementById("gscore");
 
+    if (levelEl) levelEl.textContent = state.level;
+    if (scoreEl) scoreEl.textContent = state.score;
+}
+function startGame(level){
+        state.level = level;
+        state.score = 0;
+        state.combo = 0;
+        state.matchCount = 0;
+        state.selected = null;
+        if(state.level >=9){
+            state.board= createBoardWithBlocker(8);
+        }
+        else{
+            state.board= createBoard();
+        }
+        renderBoard(state.board, boardEl, click);
+        updateHud();
+        showScreen("screen-game");
+}
 function addScore() {
     const base = 20;
     const comboTime = 3000;
@@ -49,6 +77,7 @@ function click(r,c,type){
         state.board[a.r][a.c] = EMPTY;
         state.board[b.r][b.c] = EMPTY;
         addScore();
+        updateHud();
 
 
         switch (state.level){
@@ -78,4 +107,24 @@ function click(r,c,type){
     }
     state.selected.type.classList.remove("is-selected");
     state.selected = null;
+}
+const levelButtons = document.querySelectorAll(".btnlevel");
+levelButtons.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+        const selectedLevel = Number(btn.dataset.value);
+        startGame(selectedLevel);
+    });
+});
+
+const exitBtn = document.getElementById("exit");
+if (exitBtn) {
+    exitBtn.addEventListener("click", function() {
+        showScreen("screen-start");
+    });
+}
+const newGameBtn = document.getElementById("new");
+if (newGameBtn) {
+    newGameBtn.addEventListener("click", function() {
+        startGame(state.level);
+    });
 }
