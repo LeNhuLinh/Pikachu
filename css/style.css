@@ -51,17 +51,23 @@ body {
 }
 
 .time {
-  width: min(90%, 800px);
-  height: 16px;
-  margin: 9px;
-  border-radius: 17px;
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
   overflow: hidden;
 }
 .time .bar {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   background: #ffcb05;
-  transition: width 1s linear;
+  border-radius: 999px;
+  transition: width 0.3s linear;
+  box-shadow: #1b1f3b 1px 1px 1px;
 }
 
 .wrap {
@@ -89,6 +95,16 @@ body {
   height: 100%;
   cursor: pointer;
 }
+.tile.tile--blocker {
+  background: rgb(166, 37, 195);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
 .tile.is-selected {
   outline: 0.5px solid #ffcb05;
   border-radius: 2px;
@@ -99,7 +115,7 @@ body {
 }
 
 .tile.is-hint {
-  outline: 3px solid #ee4035;
+  outline: 3px solid #edcf26;
 }
 
 .tile.tile--border,
@@ -109,16 +125,54 @@ body {
 }
 
 .tile__img {
+  image-rendering: pixelated;
   display: block;
   width: 100%;
   height: 100%;
   background-image: url("../image/pieces-sprite.png");
   background-size: 3600% 100%;
   background-position: calc(var(--i) * 100% / 35) 0;
-  image-rendering: pixelated;
   pointer-events: none;
   border-radius: 2px;
   transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+@keyframes hintPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+}
+.hint {
+  position: relative;
+  outline: 0.5px solid #edcf26;
+  outline-offset: 0px;
+  border-radius: 2px;
+  z-index: 10;
+  animation: hintPulse 1s infinite ease-in-out;
+}
+
+.connector {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.connector polyline {
+  fill: none;
+  stroke: #edcf26;
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px #edcf26);
 }
 
 /*# sourceMappingURL=style.css.map */

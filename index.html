@@ -34,6 +34,7 @@
             <div id="board" style="--cols:17; --rows:10">
 
             </div>
+            <svg id="connector" class="connector" viewBox="0 0 17 10" preserveAspectRatio="none"></svg>
         </div>
         <div class="btnplay">
             <button class="btn-gameplay" id="hint">Gợi ý</button>
@@ -46,8 +47,8 @@
         <h2 id="end-message">Game Over</h2>
         <p>Điểm <strong id="end-score"></strong> </p>
         <div class="button-end">
-            <button class="btnEnd" value="1">Ván mới</button>
-            <button class="btnEnd" value="2">Menu</button>
+            <button class="btnEnd" id="newGame" value="1">Ván mới</button>
+            <button class="btnEnd" id="menuGame" value="2">Menu</button>
         </div>
     </section>
 </main>

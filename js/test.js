@@ -1,8 +1,8 @@
-import {createBoardWithBlocker} from "./board.js";
+import {createBoard, createBoardWithBlocker} from "./board.js";
 import {BOARD_COLS, COLS, ROWS} from "./config.js";
-import {checkOneTurn, haveLine, isStraightLine, twoTurn} from "./way.js";
+import {checkOneTurn, countTypes, findHint, getPath, haveLine, isStraightLine, shuffleBoard, twoTurn} from "./way.js";
 import { EMPTY, BLOCKER } from "./config.js";
-import {compact} from "./connect.js";
+import {compact, shiftHalf} from "./connect.js";
 const testBoard = createBoardWithBlocker(8);
 
 
@@ -66,14 +66,15 @@ b1[2][5] = 1;
 b1[2][8] = 1;
 console.log(haveLine(b1, {r:2,c:5}, {r:2,c:8}));   // kỳ vọng: true
 
+
+
+
+console.log('test');
 const b2 = Array.from({length: 10}, () => Array(17).fill(0));
-b2[2][5] = 1;
-b2[2][8] = 2;
-console.log(haveLine(b2, {r:2,c:5}, {r:2,c:8}));   // kỳ vọng: false
-
-console.log(haveLine(b1, {r:2,c:5}, {r:3,c:3}));   // kỳ vọng: false
-
-console.log(compact([1, 0, 2, BLOCKER, 0, 3, 0], "end"));
-// → [0, 1, 2, B, 0, 0, 3]
-compact([1, 0, 2, BLOCKER, 0, 3, 0], "start");
-// → [1, 2, 0, B, 3, 0, 0]
+b2[2][2] = 1;
+b2[2][14] = 1;
+for (let c = 1; c <= 15; c++) {
+    if (c !== 2 && c !== 14) b2[2][c] = 9;
+}
+console.log("twoTurn:", twoTurn(b2, {r:2,c:2}, {r:2,c:14}));
+console.log("getPath:", getPath(b2, {r:2,c:2}, {r:2,c:14}));

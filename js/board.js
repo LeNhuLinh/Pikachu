@@ -1,4 +1,4 @@
-import {ROWS, COLS, BOARD_ROWS, BOARD_COLS, EMPTY, TILE_ICONS, TILE_TYPES, BLOCKER} from "./config.js";
+import {ROWS, COLS, BOARD_ROWS, BOARD_COLS, EMPTY, TILE_TYPES, BLOCKER} from "./config.js";
 
 export function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
