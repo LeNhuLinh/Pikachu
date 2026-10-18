@@ -1,9 +1,10 @@
+console.log("main.js loaded", new Date().toLocaleTimeString());
 import {countTypes, findHint, getPath, haveLine, isBoardClear, shuffleBoard} from "./way.js";
 import {shifltRotate, shiftConner, shiftHalf, shiftLeftRight, shiftUpDown} from "./connect.js";
 import {BLOCKER, EMPTY} from "./config.js";
 import {createBoard, createBoardWithBlocker, renderBoard} from "./board.js";
 const boardEl = document.getElementById("board");
-const totalTime = 100;
+const totalTime = 1000;
 const state={
     board:[],
     score: 0,
@@ -25,6 +26,7 @@ const sounds = {
     shu: new Audio("Audio/sound4.mp3"),
 
 };
+
 sounds.match.volume = 0.8;
 function playSound(type){
     if (sounds[type]) {
@@ -56,17 +58,16 @@ function updateHud(){
         shuffleEl.disabled = state.shuffleCount <= 0 || state.isOver;
     }
 }
-function startGame(level){
+function startGame(level, grade, hint, shuffe){
         state.level = level;
-        state.score = 0;
+        state.score = 0+grade;
         state.combo = 0;
         state.matchCount = 0;
         state.selected = null;
-        state.level= level;
         state.lastPointTime=0;
         state.isOver= false;
-        state.shuffleCount=10;
-        state.hints= 1000;
+        state.shuffleCount=0+shuffe;
+        state.hints= 0+hint;
         const connector = document.getElementById("connector");
         if (connector) {
             connector.innerHTML = "";
@@ -118,9 +119,12 @@ function click(r,c,type){
         playSound("match")
         state.board[a.r][a.c] = EMPTY;
         state.board[b.r][b.c] = EMPTY;
+        renderBoard(state.board, boardEl, click);
         drawLine(path);
         addScore();
         updateHud();
+        state.selected.type.classList.remove("is-selected");
+        state.selected = null;
         setTimeout(()=>{
         switch (state.level){
             case 1: break;
@@ -150,13 +154,31 @@ function click(r,c,type){
         },320);
     }else{
         playSound("error");
+        state.selected.type.classList.remove("is-selected");
+        type.classList.add("is-selected");
+        state.selected ={r,c,type};
     }
-    state.selected.type.classList.remove("is-selected");
-    state.selected = null;
+
 }
 function endGame(check){
-    stopTimer();
+    if(state.isOver){
+        return;
+    }
     state.isOver = true;
+    stopTimer();
+    let bonus =0;
+    if(check){
+        bonus= state.timeLeft * 2;
+        state.score+=bonus;
+        document.getElementById("end-message").innerHTML='Chiến Thắng!<br><span style="font-size: 20px; color: #ffcb05">Thưởng thời gian: +${bonus}</span>';
+        newGameBtn.textContent = "Tiếp tục";
+        newGameBtn.dataset.action = "win";
+    }else{
+        document.getElementById("end-message").textContent = "Game Over";
+        newGameBtn.textContent = "Chơi lại từ đầu";
+        newGameBtn.dataset.action = "lose";
+    }
+
     document.getElementById("end-message").textContent = check? "Chiến Thắng!!!": "Game Over";
     document.getElementById("end-score").textContent = state.score;
     showScreen("screen-end")
@@ -181,7 +203,7 @@ function  afterMatch(){
 
 }
 function updateTimeBar(){
-    const timeBar = document.getElementById("time-bar");
+    const timeBar = document.getElementById("timer-bar");
     if(timeBar){
         const percent =(state.timeLeft/totalTime)*100;
         timeBar.style.width = percent+"%";
@@ -206,6 +228,7 @@ function startTimer(){
     updateTimeBar();
     state.timerId = setInterval(function (){
         state.timeLeft-=1;
+        console.log(state.timeLeft, totalTime);
         updateTimeBar();
         if(state.timeLeft<=0){
             endGame(false);
@@ -217,20 +240,24 @@ const levelButtons = document.querySelectorAll(".btnlevel");
 levelButtons.forEach(function(btn) {
     btn.addEventListener("click", function() {
         const selectedLevel = Number(btn.dataset.value);
-        startGame(selectedLevel);
+        startGame(selectedLevel,0,3,10);
     });
 });
 
 const exitBtn = document.getElementById("exit");
 if (exitBtn) {
     exitBtn.addEventListener("click", function() {
+        stopTimer();
+        state.isOver = true;
         showScreen("screen-start");
     });
 }
-const newGameBtn = document.getElementById("new");
-if (newGameBtn) {
-    newGameBtn.addEventListener("click", function() {
-        startGame(state.level);
+const game = document.getElementById("new");
+if (game) {
+    game.addEventListener("click", function() {
+        if(this.dataset.action === "win"){
+        startGame(state.level,0,3,10);
+        }
     });
 }
 const shuffleBtn = document.getElementById("shuffle");
@@ -267,12 +294,16 @@ if (hintBtn) {
         },2000);
     });
 }
-const game = document.getElementById("newGame");
-if (game) {
-    game.addEventListener("click", function() {
-        startGame(state.level);
+const newGameBtn = document.getElementById("newGame");
+if (newGameBtn) {
+    newGameBtn.addEventListener("click", function() {
+        if(this.dataset.action === "win"){
+        startGame(state.level+1,state.score, state.hints, state.shuffleCount);
         state.selected = null;
         startTimer();
+        }else{
+            startGame(1,0,3,10);
+        }
     })
 }
 const menuBtn = document.getElementById("menuGame");
@@ -289,3 +320,4 @@ function drawLine(path) {
     svg.appendChild(line);
     setTimeout(() => line.remove(), 300);
 }
+window.state = state;

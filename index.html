@@ -9,6 +9,7 @@
 <main class="game">
     <section id="screen-start" class="screen is-active">
         <h1>Game Pikachu</h1>
+        <p class="subtitle"> Chọn level để bắt đầu </p>
         <div class="button">
             <button class="btnlevel" data-value="1">Level 1</button>
             <button class="btnlevel" data-value="2">Level 2</button>
@@ -24,8 +25,18 @@
     </section>
     <section id="screen-game" class="screen">
             <header class="infor">
-                <div class="game-infor">Level <strong id="glevel">1</strong></div>
-                <div class="game-infor">Điểm <strong id="gscore">0</strong></div>
+                <div class="game-infor">
+                    <span class="infor-label">BÀN</span>
+                    <strong id="glevel" class="infor-val val-cyan">1</strong>
+                </div>
+                <div class="game-infor">
+                    <span class="infor-label">LƯỢT ĐỔI</span>
+                    <strong id="gshuffle-count" class="infor-val val-purple">3</strong>
+                </div>
+                <div class="game-infor">
+                    <span class="infor-label">ĐIỂM</span>
+                    <strong id="gscore" class="infor-val val-yellow">0</strong>
+                </div>
             </header>
             <div class="time">
                 <div class="bar" id="timer-bar"></div>
@@ -47,7 +58,7 @@
         <h2 id="end-message">Game Over</h2>
         <p>Điểm <strong id="end-score"></strong> </p>
         <div class="button-end">
-            <button class="btnEnd" id="newGame" value="1">Ván mới</button>
+            <button class="btnEnd" id="newGame" value="1">Bắt đầu lại</button>
             <button class="btnEnd" id="menuGame" value="2">Menu</button>
         </div>
     </section>

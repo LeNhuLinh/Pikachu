@@ -6,10 +6,11 @@
   padding: 0;
 }
 body{
-  min-height: 100%;
-  background: whitesmoke;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FFE066 0%, #F5A623 100%);
+  background-attachment: fixed;
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
 }
 
@@ -22,17 +23,55 @@ body{
     display: block;
   }
 }
+#screen-start h1{
+  font-size: clamp(2rem,6vw,4rem);
+  color: #ffcb05;
+  text-shadow: 3px 3px 0 #372529;
+  margin-bottom: 8px;
+
+}
+.subtitle{
+  margin-bottom: 8px;
+
+}
+
 
 .btnlevel, .btn-gameplay, .btnEnd{
+  display: inline;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px;
   cursor: pointer;
-  border: 1px solid $color-backgroud;
-  border-radius: $radius;
-  background-color: #372529;
-  color: #FFFFFF;
-  transition: ransform 0.15s ease, background-color 0.15s ease;
+  border: 0;
+  border-radius: 4px;
+  background: #372529;
+  color: #fff;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
   &:hover{
-    transform: translateY(-2px);
+    transform: translateY(-4x);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+    background-color: #4a3338;
   }
+  &:active{
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
+.btn-gameplay{
+  margin: 12px 0 auto;
+
+}
+.btn-end{
+  margin: 12px 0 auto;
+  z-index: 11
+;
+}
+.btnEnd{
+
+}
+.btnplay{
+  margin: 12px 0 auto;
 }
 
 .infor{
@@ -41,33 +80,68 @@ body{
   gap: 16px;
   justify-content: center;
   align-items: center;
+  margin-bottom: 18px;
   .game-infor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: $color-surface;
-    border-radius: $radius;
-    padding: 10px;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-width: 90px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
     strong{
       color: $color-primary;
+    }
+    .infor-label{
+      color: #a3adc4;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .infor-val{
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .val-cyan {
+      color: #42d4ff;
+    }
+
+    .val-purple {
+      color: #b886ff;
+    }
+
+    .val-yellow {
+      color: #ffda33;
+      text-shadow: 0 0 12px rgba(255, 218, 51, 0.4);
     }
   }
 }
 
 .time {
+  display: flex;
+  align-items: center;
   position: relative;
-  width: 100%;
+  margin: 16px auto;
+  width: 80%;
   height: 8px;
   background: rgba(0, 0, 0, 0.12);
   border-radius: 999px;
   overflow: hidden;
+  justify-content: center;
   .bar {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    background: $color-primary;
+    background: #1D275E;
     border-radius: 999px;
     transition: width 0.3s linear;
-    box-shadow: #1b1f3b 1px 1px 1px;
+    box-shadow: #54c8b7 1px 1px 1px;
   }
 }
 
@@ -75,7 +149,7 @@ body{
   position: relative;
   width: min(90%, 800px);
   aspect-ratio: calc(#{$board-cols} / #{$board-rows+3}); ;
-  margin: 0 auto;
+  margin: -39px auto;
   #board{
     display: grid;
     grid-template-columns: repeat(var(--cols), 1fr);
@@ -100,6 +174,7 @@ body{
 
   }
   &.tile--blocker {
+    image-rendering: pixelated;
     background: rgb(166 37 195);
     backdrop-filter: blur(4px);
     border-radius: 8px;
@@ -115,8 +190,7 @@ body{
   border-radius: 2px;
   background-color: rgba(255, 255, 255, 0.15);
   box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.5);
-  transform: scale(0.8);
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 .tile.is-hint {
@@ -130,6 +204,7 @@ body{
 }
 .tile__img {
   image-rendering: pixelated;
+  border-radius: 0.5px;
   display: block;
   width: 100%;
   height: 100%;
@@ -168,11 +243,15 @@ body{
 
 .connector polyline {
   fill: none;
-  stroke: $color-accent;
-  stroke-width: 0.5px;
+  stroke: #1D275E;
+  stroke-width: 2px;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
   filter: drop-shadow(0 0 4px $color-accent);
 }
+.game {
+  width: min(100%, 900px);
+}
+
 
