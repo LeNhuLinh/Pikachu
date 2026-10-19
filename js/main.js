@@ -1,4 +1,5 @@
 console.log("main.js loaded", new Date().toLocaleTimeString());
+window.addEventListener("beforeunload", () => console.log("TRANG SẮP TẢI LẠI"));
 import {countTypes, findHint, getPath, haveLine, isBoardClear, shuffleBoard} from "./way.js";
 import {shifltRotate, shiftConner, shiftHalf, shiftLeftRight, shiftUpDown} from "./connect.js";
 import {BLOCKER, EMPTY} from "./config.js";
@@ -35,6 +36,8 @@ function playSound(type){
     }
 }
 function showScreen(id){
+    console.log("showScreen:", id);
+    console.trace();
     const screen = document.querySelectorAll(".screen");
     screen.forEach(function(screen) {
         screen.classList.remove("is-active");
@@ -46,6 +49,7 @@ function updateHud(){
     const scoreEl = document.getElementById("gscore");
     const hintEl = document.getElementById("hint");
     const shuffleEl = document.getElementById("shuffle");
+    const shuffleEl1 = document.getElementById("gshuffle-count");
     if (levelEl) levelEl.textContent = state.level;
     if (scoreEl) scoreEl.textContent = state.score;
     if (hintEl) {
@@ -54,6 +58,7 @@ function updateHud(){
     }
 
     if (shuffleEl) {
+        shuffleEl1.textContent = state.shuffleCount;
         shuffleEl.textContent = `Trộn (${state.shuffleCount})`;
         shuffleEl.disabled = state.shuffleCount <= 0 || state.isOver;
     }
@@ -195,6 +200,7 @@ function  afterMatch(){
         }
         state.shuffleCount-=1;
         const check = shuffleBoard(state.board);
+        updateHud();
         if (!check) {
             endGame(false);
             return;
@@ -240,7 +246,7 @@ const levelButtons = document.querySelectorAll(".btnlevel");
 levelButtons.forEach(function(btn) {
     btn.addEventListener("click", function() {
         const selectedLevel = Number(btn.dataset.value);
-        startGame(selectedLevel,0,3,10);
+        startGame(selectedLevel,0,state.hints,10);
     });
 });
 

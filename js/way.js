@@ -42,12 +42,18 @@ export function checkOneTurn(board, p, d){
     return null;
 }
 export function twoTurn(board, p, d){
+    let best = null;
+    let bestLen = Infinity;
     for(let i = 0; i < BOARD_ROWS; i++){
         const mid = {r: i, c: p.c};
         if(board[i][p.c] === EMPTY && isStraightLine(board, p, mid)){
             const corner = checkOneTurn(board, mid, d);
             if(corner){
-                return [mid, corner];
+                const len = dist(p,mid)+dist(mid,corner)+dist(corner,d);
+                if (len<bestLen){
+                    bestLen = len;
+                    best = [mid,corner]
+                }
             }
         }
     }
@@ -56,11 +62,15 @@ export function twoTurn(board, p, d){
         if(board[p.r][i] === EMPTY && isStraightLine(board, p, mid)){
             const corner = checkOneTurn(board, mid, d);
             if(corner){
-                return [mid, corner];
+                const len = dist(p, mid) + dist(mid, corner) + dist(corner, d);
+                if (len < bestLen) {
+                    bestLen = len;
+                    best = [mid, corner];
+                }
             }
         }
     }
-    return null;
+    return best;
 }
 export function haveLine(board, p, d){
     return getPath(board, p, d) !== null;
@@ -113,7 +123,7 @@ export function shuffleBoard(board){
         }
 
     }
-    return false;
+    return shuffleIntoEmpty(board);
 }
 export  function isBoardClear(board){
     for(let i = 1; i < BOARD_ROWS; i++){
@@ -156,4 +166,30 @@ export  function getPath(board, p, d){
         return[p,mid,conner,d];
     }
     return null;
+}
+export  function  shuffleIntoEmpty(board){
+    const cells =[];
+    const val =[];
+    for(let i = 1; i < BOARD_ROWS; i++){
+        for(let j = 1; j < BOARD_COLS; j++){
+            const temp = board[i][j];
+            if( temp === BLOCKER){ continue;}
+            cells.push({r: i, c: j});
+            if(temp !== EMPTY){ val.push(temp); }
+        }
+    }
+    for(let i = 1; i < 100; i++){
+        shuffleArray(cells);
+        for(const cell of cells){
+            board[cell.r][cell.c]= EMPTY;
+        }
+        for (let k = 0; k < val.length; k++){
+            board[cells[k].r][cells[k].c] = val[k];
+        }
+        if (findHint(board) !== null) return true;
+    }
+    return false;
+}
+function dist(a, b){
+    return Math.abs(a.r - b.r) + Math.abs(a.c - b.c);
 }
