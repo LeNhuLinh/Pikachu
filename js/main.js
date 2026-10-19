@@ -1,11 +1,10 @@
-console.log("main.js loaded", new Date().toLocaleTimeString());
-window.addEventListener("beforeunload", () => console.log("TRANG SẮP TẢI LẠI"));
+
 import {countTypes, findHint, getPath, haveLine, isBoardClear, shuffleBoard} from "./way.js";
 import {shifltRotate, shiftConner, shiftHalf, shiftLeftRight, shiftUpDown} from "./connect.js";
 import {BLOCKER, EMPTY} from "./config.js";
 import {createBoard, createBoardWithBlocker, renderBoard} from "./board.js";
 const boardEl = document.getElementById("board");
-const totalTime = 1000;
+const totalTime = 10;
 const state={
     board:[],
     score: 0,
@@ -59,7 +58,6 @@ function updateHud(){
 
     if (shuffleEl) {
         shuffleEl1.textContent = state.shuffleCount;
-        shuffleEl.textContent = `Trộn (${state.shuffleCount})`;
         shuffleEl.disabled = state.shuffleCount <= 0 || state.isOver;
     }
 }
@@ -77,7 +75,7 @@ function startGame(level, grade, hint, shuffe){
         if (connector) {
             connector.innerHTML = "";
         }
-        if(state.level >=9){
+        if(state.level ===2 || state.level === 4){
             state.board= createBoardWithBlocker(8);
         }
         else{
@@ -133,25 +131,25 @@ function click(r,c,type){
         setTimeout(()=>{
         switch (state.level){
             case 1: break;
-            case 2: shiftUpDown(state.board,"end");
+            case 3: shiftUpDown(state.board,"end");
             break;
-            case 3: shiftUpDown(state.board,"start");
+            case 5: shiftUpDown(state.board,"start");
             break;
-            case 4: shiftLeftRight(state.board,"end");
+            case 6: shiftLeftRight(state.board,"end");
             break;
-            case 5: shiftLeftRight(state.board,"start");
+            case 7: shiftLeftRight(state.board,"start");
             break;
-            case 6: shiftConner(state.board);
+            case 8: shiftConner(state.board);
             break;
-            case 7: shiftHalf(state.board);
+            case 9: shiftHalf(state.board);
             break;
-            case 8: shifltRotate(state.board,state.matchCount);
+            case 10: shifltRotate(state.board,state.matchCount);
             state.matchCount+=1;
             break;
             // có block;
-            case 9:break;
+            case 2:break;
             // có block và shift
-            case 10: shiftUpDown(state.board,"end");
+            case 4: shiftUpDown(state.board,"end");
                 break;
         }
         afterMatch();
@@ -172,19 +170,38 @@ function endGame(check){
     state.isOver = true;
     stopTimer();
     let bonus =0;
+    const screenEnd = document.getElementById("screen-end");
+    const endIcon = document.getElementById("end-icon");
+    const endLevel = document.getElementById("end-level");
+    const endBonusRow = document.getElementById("end-bonus-row");
+    const endBonus = document.getElementById("end-bonus");
+    const newGameBtn = document.getElementById("newGame");
+    if (endLevel) endLevel.textContent = state.level;
+    if (screenEnd) {
+        screenEnd.classList.toggle("win", check);
+        screenEnd.classList.toggle("lose", !check);
+    }
     if(check){
         bonus= state.timeLeft * 2;
         state.score+=bonus;
-        document.getElementById("end-message").innerHTML='Chiến Thắng!<br><span style="font-size: 20px; color: #ffcb05">Thưởng thời gian: +${bonus}</span>';
-        newGameBtn.textContent = "Tiếp tục";
-        newGameBtn.dataset.action = "win";
+        document.getElementById("end-message").innerHTML='Chiến Thắng!';
+        if(endIcon) endIcon.textContent = "";
+        if(endBonusRow) endBonusRow.style.display="";
+        if(endBonus) endBonus.textContent=`+${bonus}`;
+        if(newGameBtn) {
+            newGameBtn.textContent = "Tiếp tục";
+            newGameBtn.dataset.action = "win";
+        }
     }else{
         document.getElementById("end-message").textContent = "Game Over";
-        newGameBtn.textContent = "Chơi lại từ đầu";
-        newGameBtn.dataset.action = "lose";
+        if(endBonusRow) endBonusRow.style.display="none";
+        if(newGameBtn){
+            newGameBtn.textContent = "Chơi lại từ đầu";
+            newGameBtn.dataset.action = "lose";
+        }
+
     }
 
-    document.getElementById("end-message").textContent = check? "Chiến Thắng!!!": "Game Over";
     document.getElementById("end-score").textContent = state.score;
     showScreen("screen-end")
 }
@@ -241,7 +258,13 @@ function startTimer(){
         }
     },1000);
 }
-
+const menuBtn = document.getElementById("menuGame");
+const newGameBtn = document.getElementById("newGame");
+const hintBtn = document.getElementById("hint");
+const shuffleBtn = document.getElementById("shuffle");
+const btnRetry = document.getElementById("retry");
+const game = document.getElementById("new");
+const exitBtn = document.getElementById("exit");
 const levelButtons = document.querySelectorAll(".btnlevel");
 levelButtons.forEach(function(btn) {
     btn.addEventListener("click", function() {
@@ -250,7 +273,6 @@ levelButtons.forEach(function(btn) {
     });
 });
 
-const exitBtn = document.getElementById("exit");
 if (exitBtn) {
     exitBtn.addEventListener("click", function() {
         stopTimer();
@@ -258,15 +280,16 @@ if (exitBtn) {
         showScreen("screen-start");
     });
 }
-const game = document.getElementById("new");
+
 if (game) {
     game.addEventListener("click", function() {
-        if(this.dataset.action === "win"){
         startGame(state.level,0,3,10);
-        }
     });
+}if(btnRetry){
+    btnRetry.addEventListener("click", function() {
+        startGame(state.level,0,3,10);
+    })
 }
-const shuffleBtn = document.getElementById("shuffle");
 if(shuffleBtn) {
     shuffleBtn.addEventListener("click", function() {
         state.shuffleCount=state.shuffleCount-1;
@@ -277,7 +300,6 @@ if(shuffleBtn) {
         renderBoard(state.board, boardEl, click);
     })
 }
-const hintBtn = document.getElementById("hint");
 if (hintBtn) {
     hintBtn.addEventListener("click", function() {
         if (state.hints <= 0) {
@@ -300,7 +322,7 @@ if (hintBtn) {
         },2000);
     });
 }
-const newGameBtn = document.getElementById("newGame");
+
 if (newGameBtn) {
     newGameBtn.addEventListener("click", function() {
         if(this.dataset.action === "win"){
@@ -312,7 +334,7 @@ if (newGameBtn) {
         }
     })
 }
-const menuBtn = document.getElementById("menuGame");
+
 if (menuBtn) {
     menuBtn.addEventListener("click", function() {
         showScreen("screen-start")
@@ -326,4 +348,3 @@ function drawLine(path) {
     svg.appendChild(line);
     setTimeout(() => line.remove(), 300);
 }
-window.state = state;

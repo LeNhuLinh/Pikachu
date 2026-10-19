@@ -55,11 +55,21 @@
         </div>
     </section>
     <section id="screen-end" class="screen">
-        <h2 id="end-message">Game Over</h2>
-        <p>Điểm <strong id="end-score"></strong> </p>
-        <div class="button-end">
-            <button class="btnEnd" id="newGame" value="1">Bắt đầu lại</button>
-            <button class="btnEnd" id="menuGame" value="2">Menu</button>
+        <div class="end-card">
+            <div class="end-icon" id="end-icon"></div>
+            <h2 id="end-message">Game Over</h2>
+            <p class="end-level">Level <strong id="end-level"></strong></p>
+
+            <div class="end-score">
+                <span class="end-score__label">Điểm</span>
+                <strong id="end-score">0</strong>
+            </div>
+            <p class="end-bonus" id="end-bonus-row">Thưởng thời gian: <strong id="end-bonus"></strong></p>
+
+            <div class="button-end">
+                <button class="btnEnd" id="retry">Chơi lại</button>
+                <button class="btnEnd btnEnd--ghost" id="menuGame">Về menu</button>
+            </div>
         </div>
     </section>
 </main>

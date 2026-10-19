@@ -25,7 +25,7 @@ body{
 }
 #screen-start h1{
   font-size: clamp(2rem,6vw,4rem);
-  color: #ffcb05;
+  color: #FDFBF7 ;
   text-shadow: 3px 3px 0 #372529;
   margin-bottom: 8px;
 
@@ -71,7 +71,10 @@ body{
 
 }
 .btnplay{
-  margin: 12px 0 auto;
+  margin: 28px 0 auto;
+}
+.button-end{
+  margin: 28px 0 auto ;
 }
 
 .infor{
@@ -175,7 +178,7 @@ body{
   }
   &.tile--blocker {
     image-rendering: pixelated;
-    background: rgb(237 218 182);
+    background: #1ea597;
     backdrop-filter: blur(4px);
     border-radius: 8px;
     border: 5px solid rgba(255, 255, 255, 0.1);
@@ -228,7 +231,7 @@ body{
   outline-offset: -2px;
   border-radius: 5px;
   z-index: 10;
-  animation: hintPulse 1s infinite ease-in-out;
+  animation: hintPulse 2s infinite ease-in-out;
 
 }
 .connector {
@@ -251,6 +254,49 @@ body{
 }
 .game {
   width: min(100%, 900px);
+}
+#screen-end{
+  display: none;
+  align-items: center;
+  justify-content: center;
+  &.is-active{
+    display: flex;
+  }
+}
+.end-card{
+  width: 50%;
+  max-width: 420%;
+  margin:0 auto;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 22px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.end-icon{
+  font-size: 64px;
+  margin-bottom: 14px;
+  display: block;
+}
+.end-score strong{
+  font-size: 48px;
+  color: #372529;
+  display: block;
+  margin-top: 8px;
+}
+#screen-end.win #end-message{
+  color: #2ecc71;
+  font-size: 32px;
+  text-transform: uppercase;
+}
+#screen-end.lose #end-message{
+  color:#e74c3c;
+  font-size: 32px;
+  text-transform: uppercase;
+}
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
 

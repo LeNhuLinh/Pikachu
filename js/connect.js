@@ -49,11 +49,11 @@ export function shiftLeftRight(board, direction){
 }
 export function shiftHalf(board) {
     for(let i = 1; i <= ROWS; i++){
-        const left = board[i].slice(1,8) ;
-        const right = board[i].slice(9,16);
+        const left = board[i].slice(1,9) ;
+        const right = board[i].slice(9,15+1);
         const newLeft = compact(left,"end");
         const newRight = compact(right,"start");
-        for(let j = 1; j < 8; j++){
+        for(let j = 1; j <= 8; j++){
             board[i][j]=newLeft[j-1];
         }
         for(let a = 9; a <= 15; a++){
